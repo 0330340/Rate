@@ -3,103 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculate Turnover, DSO or Receivables</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-        }
-        form {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 320px;
-        }
-        input[type="text"] {
-            width: 80%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px; /* Abstand zum vorherigen Button */
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        .clear-button {
-            background-color: #dc3545; /* Rote Farbe für den Clear-Button */
-        }
-        .clear-button:hover {
-            background-color: #c82333; /* Dunklere rote Farbe für Hover */
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 24px
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 10px;
-            font-size: 18px
-        }
-        p {
-            color: red;
-            text-align: center;
-        }
-    </style>
-    <script>
-        function formatNumberInput(input) {
-            let value = input.value.replace(/\./g, '').replace(/,/g, '.');
-            if (!isNaN(value) && value !== '') {
-                input.value = parseFloat(value).toLocaleString('de-DE');
-            }
-        }
-
-        function clearInputs() {
-            document.getElementById('turnover').value = '';
-            document.getElementById('dso').value = '';
-            document.getElementById('receivables').value = '';
-        }
-    </script>
+    <title>Berechnungen</title>
 </head>
 <body>
+    <h1>Berechnungen</h1>
     <form method="POST">
-        <h1>Calculate Turnover, DSO or Receivables</h1>
-        <label for="turnover">Turnover:</label>
-        <input type="text" id="turnover" name="turnover" value="{{ turnover if turnover is not none else request.form.turnover }}" oninput="formatNumberInput(this)">
-        
-        <label for="dso">DSO:</label>
-        <input type="text" id="dso" name="dso" value="{{ dso if dso is not none else request.form.dso }}" oninput="formatNumberInput(this)">
-        
-        <label for="receivables">Receivables:</label>
-        <input type="text" id="receivables" name="receivables" value="{{ receivables if receivables is not none else request.form.receivables }}" oninput="formatNumberInput(this)">
-        
-        <button type="submit">Calculate</button>
-        <button type="button" class="clear-button" onclick="clearInputs()">Clear</button>
+        <label for="turnover">Rate on Turnover (%):</label>
+        <input type="text" id="turnover" name="turnover"><br><br>
 
-        <h2>Clear data before using again</h2>
-        
-        {% if error %}
-        <p>{{ error }}</p>
-        {% endif %}
+        <label for="dso">DSO (Days Sales Outstanding):</label>
+        <input type="text" id="dso" name="dso"><br><br>
+
+        <label for="receivables">Rate on Outstandings (%):</label>
+        <input type="text" id="receivables" name="receivables"><br><br>
+
+        <input type="submit" value="Berechnen">
     </form>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    {% if rate_on_turnover %}
+        <p>Rate on Turnover: {{ rate_on_turnover }}</p>
+    {% endif %}
+
+    {% if rate_on_outstandings %}
+        <p>Rate on Outstandings: {{ rate_on_outstandings }}</p>
+    {% endif %}
 </body>
 </html>
