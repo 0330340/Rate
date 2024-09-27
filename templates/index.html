@@ -3,33 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Berechnungen</title>
+    <title>Rate on Turnover, DSO oder Outstandings berechnen</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 320px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .clear-button {
+            background-color: #dc3545; /* Rote Farbe für den Clear-Button */
+        }
+        .clear-button:hover {
+            background-color: #c82333; /* Dunklere rote Farbe für Hover */
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        p {
+            color: red;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <h1>Berechnungen</h1>
     <form method="POST">
-        <label for="turnover">Rate on Turnover (%):</label>
-        <input type="text" id="turnover" name="turnover"><br><br>
-
+        <h1>Rate on Turnover, DSO oder Outstandings berechnen</h1>
+        <label for="rate_on_turnover">Rate on Turnover (%):</label>
+        <input type="text" id="rate_on_turnover" name="rate_on_turnover" value="{{ turnover or '' }}" placeholder="z.B. 5.00000%" step="0.00001">
+        
         <label for="dso">DSO (Days Sales Outstanding):</label>
-        <input type="text" id="dso" name="dso"><br><br>
+        <input type="number" id="dso" name="dso" value="{{ dso or '' }}" placeholder="z.B. 30" required>
+        
+        <label for="rate_on_outstandings">Rate on Outstandings (%):</label>
+        <input type="text" id="rate_on_outstandings" name="rate_on_outstandings" value="{{ outstandings or '' }}" placeholder="z.B. 2.50000%" step="0.00001">
+        
+        <button type="submit">Berechnen</button>
+        <button type="button" class="clear-button" onclick="document.getElementById('rate_on_turnover').value=''; document.getElementById('dso').value=''; document.getElementById('rate_on_outstandings').value='';">Clear</button>
 
-        <label for="receivables">Rate on Outstandings (%):</label>
-        <input type="text" id="receivables" name="receivables"><br><br>
+        <h2>Clear data before using again</h2>
 
-        <input type="submit" value="Berechnen">
+        {% if error %}
+        <p>{{ error }}</p>
+        {% endif %}
     </form>
-
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
-
-    {% if rate_on_turnover %}
-        <p>Rate on Turnover: {{ rate_on_turnover }}</p>
-    {% endif %}
-
-    {% if rate_on_outstandings %}
-        <p>Rate on Outstandings: {{ rate_on_outstandings }}</p>
-    {% endif %}
 </body>
 </html>
